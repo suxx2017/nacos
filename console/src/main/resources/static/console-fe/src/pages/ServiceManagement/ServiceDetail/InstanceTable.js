@@ -104,6 +104,30 @@ class InstanceTable extends React.Component {
     });
   }
 
+  shutdownInstance(index, record) {
+    const { instance } = this.state;
+    const { ip, port, ephemeral, weight, enabled, metadata } = record;
+    const { clusterName, serviceName } = this.props;
+    request({
+      method: 'PUT',
+      url: 'v1/ns/instance/shutdown',
+      data: {
+        serviceName,
+        clusterName,
+        ip,
+        port,
+        ephemeral,
+        weight,
+        enabled,
+        metadata: JSON.stringify(metadata),
+      },
+      dataType: 'text',
+      beforeSend: () => this.openLoading(),
+      error: e => Message.error(e.responseText || 'error'),
+      complete: () => this.closeLoading(),
+    });
+  }
+
   onChangePage(pageNum) {
     this.setState({ pageNum }, () => this.getInstanceList());
   }
@@ -146,7 +170,7 @@ class InstanceTable extends React.Component {
           />
           <Table.Column
             title={locale.operation}
-            width={160}
+            width={240}
             cell={(value, index, record) => (
               <div>
                 <Button
@@ -158,9 +182,16 @@ class InstanceTable extends React.Component {
                 </Button>
                 <Button
                   type={record.enabled ? 'normal' : 'secondary'}
+                  className="edit-btn"
                   onClick={() => this.switchState(index, record)}
                 >
                   {locale[record.enabled ? 'offline' : 'online']}
+                </Button>
+                <Button
+                  type="normal"
+                  onClick={() => this.shutdownInstance(index, record)}
+                >
+                  {locale.shutdown}
                 </Button>
               </div>
             )}

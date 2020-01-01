@@ -180,6 +180,7 @@ const I18N_CONF = {
     editor: '编辑',
     offline: '下线',
     online: '上线',
+    shutdown: '关闭',
     ephemeral: '临时实例',
   },
   EditInstanceDialog: {

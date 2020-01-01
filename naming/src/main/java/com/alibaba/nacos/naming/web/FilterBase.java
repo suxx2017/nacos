@@ -48,6 +48,7 @@ public class FilterBase {
         initClassMethod(DistroController.class);
         initClassMethod(OperatorController.class);
         initClassMethod(ApiController.class);
+        initClassMethod(InstanceControllerEx.class);
     }
 
     public Method getMethod(String httpMethod, String path) {
